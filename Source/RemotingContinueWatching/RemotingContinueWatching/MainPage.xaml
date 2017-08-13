@@ -1,0 +1,54 @@
+﻿<Page
+    x:Class="RemotingContinueWatching.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RemotingContinueWatching"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mmpf="using:Microsoft.PlayerFramework"
+    xmlns:adaptive="using:Microsoft.PlayerFramework.Adaptive"
+    mc:Ignorable="d">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <SplitView
+            IsPaneOpen="True"
+            DisplayMode="CompactInline"
+            OpenPaneLength="240">
+            <SplitView.Pane>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ListView
+                    ItemsSource="{Binding Videos}" 
+                    DisplayMemberPath="DisplayName" 
+                    SelectedItem="{Binding SelectedVideo, Mode=TwoWay}"/>
+                    <StackPanel Grid.Row="1" Margin="0, 0, 0, 10">
+                        <TextBlock Text="Continue watching on: "/>
+                        <ComboBox ItemsSource="{Binding RemoteSystems}"  
+                                  HorizontalAlignment="Stretch" Margin="5"
+                                  SelectedItem="{Binding SelectedSystem, Mode=TwoWay}"
+                                  DisplayMemberPath="DisplayName"/>
+                        <Button Content="GO" 
+                            Click="{x:Bind ViewModel.OnContinueWatching}"
+                            HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Grid>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid>
+                    <mmpf:MediaPlayer 
+                        x:Name="Player"
+                        AutoPlay="True"
+                        StartupPosition="{x:Bind ViewModel.StartPosition, Mode=OneWay}"
+                        Position="{x:Bind ViewModel.CurrentPosition, Mode=TwoWay}"
+                        Source="{x:Bind ViewModel.Source, Mode=OneWay}">
+                        <mmpf:MediaPlayer.Plugins>
+                            <adaptive:AdaptivePlugin />
+                        </mmpf:MediaPlayer.Plugins>
+                    </mmpf:MediaPlayer>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
+    </Grid>
+</Page>
